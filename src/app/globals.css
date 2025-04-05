@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap");
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -123,8 +125,13 @@
 
 /* Add to your global.css or via Tailwind config */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .animate-float {
@@ -133,4 +140,9 @@
 
 .bg-gray-100 {
   background-color: #f3f4f6;
+}
+
+*::selection {
+  background: white;
+  color: black;
 }
