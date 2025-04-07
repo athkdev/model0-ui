@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Dashboard from "@/components/my/DashboardPage/Dashboard";
 
 export const metadata: Metadata = {
-  title: "m0 | Your Models",
+  title: "m0 | Projects",
   description:
     "Manage your machine learning projects in one place. Create, view, and organize your ML models efficiently.",
   keywords:

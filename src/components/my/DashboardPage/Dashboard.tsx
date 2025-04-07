@@ -28,7 +28,7 @@ export default function Dashboard() {
   const handleSubmit = async () => {
     const userID = Cookies.get("USER_ID");
 
-    await axios.post(`${API_BASE}api/project/create`, {
+    const res = await axios.post(`${API_BASE}api/project/create`, {
       user_id: userID,
       project_name: projectName,
       description: projectDescription,
@@ -39,67 +39,12 @@ export default function Dashboard() {
 
   const fetchProjects = async () => {
     try {
-      // const userID = Cookies.get("USER_ID");
-      // const response = await axios.get(
-      //   `${API_BASE}api/project/?user_id=${userID}`
-      // );
-      // setProjects(response.data);
-      setProjects([
-        {
-          id: "1",
-          user_id: "1",
-          name: "Sentiment Analysis Model",
-          description:
-            "A model for analyzing customer feedback sentiment to improve product response times",
-          created_at: new Date().toString(),
-          last_edited_at: new Date().toString(),
-        },
-        {
-          id: "2",
-          user_id: "1",
-          name: "Content Recommendation Engine",
-          description:
-            "ML model that personalizes content recommendations based on user browsing behavior",
-          created_at: new Date().toString(),
-          last_edited_at: new Date().toString(),
-        },
-        {
-          id: "3",
-          user_id: "1",
-          name: "Fraud Detection System",
-          description:
-            "Real-time transaction analysis to identify potentially fraudulent activities",
-          created_at: new Date().toString(),
-          last_edited_at: new Date().toString(),
-        },
-        {
-          id: "4",
-          user_id: "1",
-          name: "Image Classification API",
-          description:
-            "Computer vision model for categorizing product images in our e-commerce platform",
-          created_at: new Date().toString(),
-          last_edited_at: new Date().toString(),
-        },
-        {
-          id: "5",
-          user_id: "1",
-          name: "Sales Forecasting Tool",
-          description:
-            "Predictive model that projects quarterly sales based on historical data and market trends",
-          created_at: new Date().toString(),
-          last_edited_at: new Date().toString(),
-        },
-        {
-          id: "6",
-          user_id: "1",
-          name: "Customer Churn Predictor",
-          description:
-            "ML model that identifies customers at risk of subscription cancellation to enable targeted retention",
-          created_at: new Date().toString(),
-          last_edited_at: new Date().toString(),
-        },
-      ]);
+      const userID = Cookies.get("USER_ID");
+      const response = await axios.get(
+        `${API_BASE}api/project/?user_id=${userID}`
+      );
+      console.log(response.data);
+      setProjects(response.data);
     } catch (error) {
       console.error("Failed to fetch projects:", error);
     }
@@ -136,12 +81,7 @@ export default function Dashboard() {
             </DialogDescription>
           </DialogHeader>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
-          >
+          <form>
             <div className="flex flex-col gap-4 mb-4">
               <div>
                 <label
@@ -185,7 +125,9 @@ export default function Dashboard() {
             </DialogClose>
 
             <div className="flex justify-end gap-2">
-              <Button type="submit">Create</Button>
+              <Button onClick={() => handleSubmit()} type="submit">
+                Create
+              </Button>
             </div>
           </DialogFooter>
         </DialogContent>
