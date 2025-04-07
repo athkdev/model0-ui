@@ -1,7 +1,7 @@
 // app/login/page.tsx
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -125,7 +125,7 @@ export default function Login() {
             </button>
           </form>
           <p className="text-center mt-4">
-            Don't have an account?
+            Don&apos;t have an account?
             <Link
               href="/signup"
               className="text-blue-500 hover:text-blue-700 ml-1"

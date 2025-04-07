@@ -27,7 +27,7 @@ export default function Home() {
     return () => {
       cancelAnimationFrame(animationRef.current);
     };
-  }, []);
+  });
 
   function handleMouseMove(event: React.MouseEvent) {
     if (containerRef.current) {
