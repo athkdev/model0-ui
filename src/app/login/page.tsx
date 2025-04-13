@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 export default function Login() {
   const router = useRouter();
@@ -58,81 +59,113 @@ export default function Login() {
 
   return (
     <div
-      className="text-black flex items-center justify-center min-h-screen bg-gray-100 relative overflow-hidden"
-      onMouseMove={handleMouseMove}
+      className="text-black min-h-screen w-full bg-gray-100 relative overflow-hidden"
       ref={containerRef}
     >
       <div
         className="absolute inset-0 pointer-events-none"
         style={gradientStyle}
       ></div>
-      <div className="w-full max-w-md relative z-10">
-        <div
-          className={`bg-white shadow-md rounded-lg px-8 py-6 transition ${
-            isFormFocused ? "scale-105" : "border-gray-300"
-          }`}
-        >
-          <h2 className="text-xl font-semibold text-center mb-6">Login</h2>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleLogin();
-            }}
-          >
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="text"
-                className="bg-white w-full px-3 py-2 border rounded-lg focus:outline-none transition-all duration-300"
-                placeholder="Enter your email"
-                required
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
+
+      {/* Main Container - Split Layout (Full Page) */}
+      <div className="flex flex-col md:flex-row h-screen w-full">
+        {/* Left Side - Image */}
+        <div className="md:w-1/2 bg-neutral-800 relative h-64 md:h-full">
+          {/* Placeholder image - replace with your actual image */}
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-800 to-emerald-600">
+            {/* You can use Next's Image component for optimized images */}
+            {/* <Image 
+              src="/your-image-path.jpg" 
+              alt="Login image" 
+              fill
+              style={{ objectFit: "cover" }}
+              priority 
+            /> */}
+
+            {/* Placeholder content until you add your image */}
+            <div className="text-center p-6">
+              <h1 className="text-3xl font-bold text-white mb-2">
+                Welcome Back
+              </h1>
+              <p className="text-emerald-100 max-w-xs mx-auto">
+                Sign in to access your account and continue your journey with
+                us.
+              </p>
             </div>
-            <div className="mb-6">
-              <label
-                htmlFor="password"
-                className="block text-gray-700 text-sm font-bold mb-2"
+          </div>
+        </div>
+
+        {/* Right Side - Login Form */}
+        <div className="md:w-1/2 bg-white flex items-center justify-center">
+          <div className="w-full max-w-md px-8 py-12">
+            <div
+              className={`transition-transform duration-300 ${
+                isFormFocused ? "scale-105" : ""
+              }`}
+            >
+              <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleLogin();
+                }}
               >
-                Password
-              </label>
-              <input
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                className="bg-white w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-neutral-500"
-                placeholder="Enter your password"
-                required
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
+                <div className="mb-4">
+                  <label
+                    htmlFor="email"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    className="bg-white w-full px-3 py-2 border rounded-lg focus:outline-none transition-all duration-300"
+                    placeholder="Enter your email"
+                    required
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <div className="mb-6">
+                  <label
+                    htmlFor="password"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    className="bg-white w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-neutral-500"
+                    placeholder="Enter your password"
+                    required
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-neutral-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-neutral-600 focus:outline-none focus:shadow-outline"
+                >
+                  Login
+                </button>
+              </form>
+              <p className="text-center mt-4">
+                Don&apos;t have an account?
+                <Link
+                  href="/signup"
+                  className="text-blue-500 hover:text-blue-700 ml-1"
+                >
+                  Sign up
+                </Link>
+              </p>
             </div>
-            <button
-              type="submit"
-              className="w-full bg-neutral-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-neutral-600 focus:outline-none focus:shadow-outline"
-            >
-              Login
-            </button>
-          </form>
-          <p className="text-center mt-4">
-            Don&apos;t have an account?
-            <Link
-              href="/signup"
-              className="text-blue-500 hover:text-blue-700 ml-1"
-            >
-              Sign up
-            </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>
