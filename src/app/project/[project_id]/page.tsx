@@ -1,7 +1,7 @@
 // app/project/[project_id]/page.tsx
-import Project from "@/components/my/ProjectPage/Project";
 import axios from "axios";
 import { Metadata, ResolvingMetadata } from "next";
+import Project from "../components/Project";
 
 type Props = {
   params: { project_id: string };
