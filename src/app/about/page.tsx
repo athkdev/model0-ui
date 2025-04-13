@@ -4,28 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { headerFont } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 
-export default function Home() {
-  const [appName] = useState("model-0");
-  const [description] = useState("Plug and play LLM models under minutes.");
+export default function About() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [letterSpacing, setLetterSpacing] = useState(0);
   const containerRef = useRef(null);
-  const animationRef = useRef(0);
-
-  function animate() {
-    const time = Date.now() / 1000;
-    setLetterSpacing(Math.sin(time) * 10);
-    animationRef.current = requestAnimationFrame(animate);
-  }
-
-  useEffect(() => {
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(animationRef.current);
-    };
-  }, []);
 
   function handleMouseMove(event) {
     if (containerRef.current) {
@@ -41,6 +24,28 @@ export default function Home() {
     background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(68, 50, 168, 0.1), transparent 80%)`,
   };
 
+  // Team members data
+  const teamMembers = [
+    {
+      name: "Alex Chen",
+      role: "Founder & CEO",
+      bio: "Former ML researcher at DeepMind with a passion for making AI accessible to everyone.",
+      image: "/team/alex.jpg", // Replace with actual image path
+    },
+    {
+      name: "Sarah Johnson",
+      role: "CTO",
+      bio: "10+ years building scalable ML infrastructure at leading tech companies.",
+      image: "/team/sarah.jpg", // Replace with actual image path
+    },
+    {
+      name: "Michael Rodriguez",
+      role: "Head of Product",
+      bio: "Product leader focused on creating intuitive interfaces for complex technologies.",
+      image: "/team/michael.jpg", // Replace with actual image path
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Navbar with floating elements */}
@@ -51,10 +56,9 @@ export default function Home() {
             <div className="w-8 h-8 rounded-md bg-gray-900 flex items-center justify-center text-white font-bold">
               M0
             </div>
-            <span className="text-xl font-bold text-gray-900">{appName}</span>
+            <span className="text-xl font-bold text-gray-900">model-0</span>
           </div>
 
-          {/* Navigation Links - With Background */}
           <div className="absolute left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-white/70 px-6 py-2 rounded-lg border border-gray-200 shadow-sm">
             <div className="flex items-center space-x-8">
               <Link
@@ -63,7 +67,10 @@ export default function Home() {
               >
                 Product
               </Link>
-              <Link href="/about" className="text-gray-600 hover:text-gray-900">
+              <Link
+                href="/about"
+                className="text-gray-600 hover:text-gray-900 font-medium"
+              >
                 About
               </Link>
               <Link
@@ -89,33 +96,89 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Main Content - Keeping Original Design */}
-      <section
-        className="flex items-center justify-center flex-grow bg-gray-100 relative overflow-hidden"
-        ref={containerRef}
-      >
+      {/* Main Content */}
+      <div className="flex-grow relative overflow-hidden" ref={containerRef}>
         <div
           className="absolute inset-0 pointer-events-none"
           style={gradientStyle}
         ></div>
-        <div className="text-center relative z-10">
-          <h1
-            className={`text-[200px] font-bold text-gray-900 mb-4 transition-all duration-300 ease-in-out animate-float ${headerFont?.className}`}
-            style={{ letterSpacing: `${letterSpacing}px` }}
-          >
-            {appName}
-          </h1>
-          <p className="text-xl text-gray-600">{description}</p>
-          <div className="mt-10 flex justify-center gap-4">
-            <Link href="/login">
-              <Button>Take me to dashboard</Button>
-            </Link>
-            <Link href="/signup">
-              <Button>I'm new to model-0</Button>
-            </Link>
+
+        <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
+          {/* Hero Section */}
+          <div className="text-center mb-20">
+            <h1
+              className={`text-5xl md:text-6xl font-bold text-gray-900 mb-6 ${headerFont?.className}`}
+            >
+              Our Mission
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              We're building the future where machine learning is accessible to
+              everyone, not just AI experts and large corporations.
+            </p>
+          </div>
+
+          {/* Story Section */}
+          <div className="grid md:grid-cols-2 gap-16 mb-24 items-center">
+            <div className="order-2 md:order-1">
+              <h2
+                className={`text-3xl font-bold text-gray-900 mb-6 ${headerFont?.className}`}
+              >
+                Our Story
+              </h2>
+              <div className="space-y-4 text-gray-500">
+                <p>
+                  Founded in 2023,{" "}
+                  <span className="text-gray-800">model-0</span> emerged from a
+                  simple observation: deploying machine learning models was
+                  unnecessarily complex. We noticed the disconnect between rapid
+                  AI advancements and the difficulty of implementing them, set
+                  out to create a solution.
+                </p>
+                <p>
+                  What began as a small project to simplify our own ML workflows
+                  quickly evolved when we realized how many others faced the
+                  same challenges. Today, we're helping teams of all sizes
+                  harness the power of machine learning without the traditional
+                  barriers of cost and technical expertise.
+                </p>
+                <p>
+                  Our platform has grown, but our mission remains the same:{" "}
+                  <span className="text-gray-800">
+                    powerful technologies should be accessible to all. AI
+                    shouldn't only be accessible for those who established in
+                    the field.
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="order-1 md:order-2 bg-white p-1 rounded-lg shadow-md">
+              <div className="bg-gray-200 h-80 rounded-lg flex items-center justify-center text-gray-400">
+                Company Image
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="mt-24 text-center">
+            <div className="bg-white p-10 rounded-xl shadow-sm border border-gray-200 max-w-3xl mx-auto">
+              <h2
+                className={`text-3xl font-bold text-gray-900 mb-4 ${headerFont?.className}`}
+              >
+                Join Our Journey
+              </h2>
+              <p className="text-gray-600 mb-8">
+                Ready to build the future of machine learning with us? We would
+                be launching soon - join the waitlist! And no we will not
+                bombard you with emails : ).
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Input placeholder="Email address" />
+                <Button>Join our waitlist</Button>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 bg-white/80 backdrop-blur-md">
@@ -243,7 +306,7 @@ export default function Home() {
           {/* Copyright and Social Links */}
           <div className="pt-6 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-600 mb-4 md:mb-0">
-              © {new Date().getFullYear()} {appName}. All rights reserved.
+              © {new Date().getFullYear()} model-0. All rights reserved.
             </div>
             <div className="flex space-x-6">
               <Link

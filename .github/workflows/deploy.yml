@@ -35,5 +35,6 @@ jobs:
             rm -rf $HOME/model0-ui
             git clone ${{ secrets.GIT_URL }}
             cd model0-ui
+            NEXT_PUBLIC_API_BASE=${{ secrets.ENV_API_BASE }}
             sudo docker build -t model0-ui-image .
             sudo docker run -d -p 3000:3000 --name model0-ui-container model0-ui-image
