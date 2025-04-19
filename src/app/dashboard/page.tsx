@@ -1,7 +1,7 @@
 // app/dashboard/page.tsx
 
 import type { Metadata } from "next";
-import Dashboard from "@/components/my/DashboardPage/Dashboard";
+import Dashboard from "./components/Dashboard";
 
 export const metadata: Metadata = {
   title: "m0 | Projects",
