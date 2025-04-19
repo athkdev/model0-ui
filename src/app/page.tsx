@@ -58,10 +58,10 @@ export default function Home() {
           <div className="absolute left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-white/70 px-6 py-2 rounded-lg border border-gray-200 shadow-sm">
             <div className="flex items-center space-x-8">
               <Link
-                href="/product"
+                href="/pricing"
                 className="text-gray-600 hover:text-gray-900"
               >
-                Product
+                Pricing
               </Link>
               <Link href="/about" className="text-gray-600 hover:text-gray-900">
                 About
@@ -123,7 +123,7 @@ export default function Home() {
           {/* Footer Links */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Product</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Pricing</h3>
               <ul className="space-y-2">
                 <li>
                   <Link
@@ -247,7 +247,7 @@ export default function Home() {
             </div>
             <div className="flex space-x-6">
               <Link
-                href="https://twitter.com"
+                href="https://x.com/athkdev"
                 className="text-gray-600 hover:text-gray-900"
                 aria-label="Twitter"
               >
@@ -260,7 +260,7 @@ export default function Home() {
                 </svg>
               </Link>
               <Link
-                href="https://github.com"
+                href="https://github.com/athkdev"
                 className="text-gray-600 hover:text-gray-900"
                 aria-label="GitHub"
               >
@@ -277,7 +277,7 @@ export default function Home() {
                 </svg>
               </Link>
               <Link
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/athk"
                 className="text-gray-600 hover:text-gray-900"
                 aria-label="LinkedIn"
               >

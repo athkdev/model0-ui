@@ -5,10 +5,19 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { headerFont } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
-export default function About() {
+export default function Contact() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   function handleMouseMove(event) {
     if (containerRef.current) {
@@ -24,32 +33,81 @@ export default function About() {
     background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(68, 50, 168, 0.1), transparent 80%)`,
   };
 
-  // Team members data
-  const teamMembers = [
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Simulate form submission
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitSuccess(true);
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+    }, 1500);
+  };
+
+  // Contact information
+  const contactInfo = [
     {
-      name: "Alex Chen",
-      role: "Founder & CEO",
-      bio: "Former ML researcher at DeepMind with a passion for making AI accessible to everyone.",
-      image: "/team/alex.jpg", // Replace with actual image path
+      title: "Email",
+      value: "me@athk.dev",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          />
+        </svg>
+      ),
     },
     {
-      name: "Sarah Johnson",
-      role: "CTO",
-      bio: "10+ years building scalable ML infrastructure at leading tech companies.",
-      image: "/team/sarah.jpg", // Replace with actual image path
-    },
-    {
-      name: "Michael Rodriguez",
-      role: "Head of Product",
-      bio: "Product leader focused on creating intuitive interfaces for complex technologies.",
-      image: "/team/michael.jpg", // Replace with actual image path
+      title: "Office",
+      value: "123 AI Street, San Francisco, CA 94103",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+          />
+        </svg>
+      ),
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Navbar with floating elements */}
-      <nav className="sticky top-0 z-50 px-4 py-4 bg-transparent">
+      <nav className="sticky p-0 z-50 px-4 py-4 bg-transparent">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo and Brand - Floating */}
           <div className="flex items-center space-x-2 z-20">
@@ -67,15 +125,12 @@ export default function About() {
               >
                 Pricing
               </Link>
-              <Link
-                href="/about"
-                className="text-gray-600 hover:text-gray-900 font-medium"
-              >
+              <Link href="/about" className="text-gray-600 hover:text-gray-900">
                 About
               </Link>
               <Link
                 href="/contact"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-gray-600 hover:text-gray-900 font-medium"
               >
                 Contact
               </Link>
@@ -105,76 +160,213 @@ export default function About() {
 
         <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
           {/* Hero Section */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <h1
               className={`text-5xl md:text-6xl font-bold text-gray-900 mb-6 ${headerFont?.className}`}
             >
-              Our Mission
+              Get in Touch
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We're building the future where machine learning is accessible to
-              everyone, not just AI experts and large corporations.
+              Have questions about our platform? Want to join our team? We'd
+              love to hear from you.
             </p>
           </div>
 
-          {/* Story Section */}
-          <div className="grid md:grid-cols-2 gap-16 mb-24 items-center">
-            <div className="order-2 md:order-1">
-              <h2
-                className={`text-3xl font-bold text-gray-900 mb-6 ${headerFont?.className}`}
-              >
-                Our Story
-              </h2>
-              <div className="space-y-4 text-gray-500">
-                <p>
-                  Founded in 2023,{" "}
-                  <span className="text-gray-800">model-0</span> emerged from a
-                  simple observation: deploying machine learning models was
-                  unnecessarily complex. We noticed the disconnect between rapid
-                  AI advancements and the difficulty of implementing them, set
-                  out to create a solution.
-                </p>
-                <p>
-                  What began as a small project to simplify our own ML workflows
-                  quickly evolved when we realized how many others faced the
-                  same challenges. Today, we're helping teams of all sizes
-                  harness the power of machine learning without the traditional
-                  barriers of cost and technical expertise.
-                </p>
-                <p>
-                  Our platform has grown, but our mission remains the same:{" "}
-                  <span className="text-gray-800">
-                    powerful technologies should be accessible to all. AI
-                    shouldn't only be accessible for those who established in
-                    the field.
-                  </span>
-                </p>
+          {/* Contact Form and Information */}
+          <div className="grid md:grid-cols-5 gap-8 mb-20">
+            {/* Contact Information */}
+            <div className="md:col-span-2 space-y-8">
+              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
+                <h2
+                  className={`text-2xl font-bold text-gray-900 mb-6 ${headerFont?.className}`}
+                >
+                  Contact Information
+                </h2>
+                <div className="space-y-6">
+                  {contactInfo.map((info, index) => (
+                    <div key={index} className="flex items-start space-x-4">
+                      <div className="text-indigo-600 mt-1">{info.icon}</div>
+                      <div>
+                        <h3 className="font-medium text-gray-900">
+                          {info.title}
+                        </h3>
+                        <p className="text-gray-600">{info.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="order-1 md:order-2 bg-white p-1 rounded-lg shadow-md">
-              <div className="bg-gray-200 h-80 rounded-lg flex items-center justify-center text-gray-400">
-                Company Image
-              </div>
+
+            {/* Contact Form */}
+            <div className="md:col-span-3 bg-white p-8 rounded-lg shadow-sm border border-gray-200">
+              <h2
+                className={`text-2xl font-bold text-gray-900 mb-6 ${headerFont?.className}`}
+              >
+                Send Us a Message
+              </h2>
+              {submitSuccess ? (
+                <div className="bg-green-50 p-4 rounded-md border border-green-200 mb-6">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <svg
+                        className="h-5 w-5 text-green-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-green-800">
+                        Message sent successfully!
+                      </h3>
+                      <p className="mt-2 text-sm text-green-700">
+                        Thank you for reaching out. We'll get back to you
+                        shortly.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Name
+                      </label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Email
+                      </label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        placeholder="your.email@example.com"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Subject
+                    </label>
+                    <Input
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                      placeholder="How can we help?"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Message
+                    </label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      rows={6}
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      placeholder="Tell us how we can help you..."
+                      className="resize-none"
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                    </Button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
 
-          {/* CTA Section */}
-          <div className="mt-24 text-center">
-            <div className="bg-white p-10 rounded-xl shadow-sm border border-gray-200 max-w-3xl mx-auto">
+          {/* FAQ Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
               <h2
                 className={`text-3xl font-bold text-gray-900 mb-4 ${headerFont?.className}`}
               >
-                Join Our Journey
+                Frequently Asked Questions
               </h2>
-              <p className="text-gray-600 mb-8">
-                Ready to build the future of machine learning with us? We would
-                be launching soon - join the waitlist! And no we will not
-                bombard you with emails : ).
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Find quick answers to common questions about our platform and
+                services.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Input placeholder="Email address" />
-                <Button>Join our waitlist</Button>
-              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                {
+                  question: "How soon can I expect a response?",
+                  answer:
+                    "We typically respond to all inquiries within 24-48 business hours. For urgent matters, please call our support line directly.",
+                },
+                {
+                  question: "Do you offer custom ML solutions?",
+                  answer:
+                    "Yes, we offer customized machine learning solutions tailored to your specific business needs. Contact our team to discuss your requirements.",
+                },
+                {
+                  question: "Is there a free trial available?",
+                  answer:
+                    "Yes, we offer a 14-day free trial with full access to all features. No credit card required to start your trial.",
+                },
+                {
+                  question: "What kind of support do you provide?",
+                  answer:
+                    "We provide comprehensive support including documentation, tutorials, email support, and dedicated account managers for enterprise customers.",
+                },
+              ].map((faq, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+                >
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    {faq.question}
+                  </h3>
+                  <p className="text-gray-600">{faq.answer}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -186,7 +378,7 @@ export default function About() {
           {/* Footer Links */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Product</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Pricing</h3>
               <ul className="space-y-2">
                 <li>
                   <Link
