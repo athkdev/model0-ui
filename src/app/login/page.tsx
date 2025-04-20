@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "Login to Your App Name",
     description:
       "Sign in to your account to access personalized features and manage your profile.",
-    url: `${process.env.NEXT_PUBLIC_API_BASE}login`,
+    url: `/login`,
     siteName: "Model-0",
     // images: [
     //   {

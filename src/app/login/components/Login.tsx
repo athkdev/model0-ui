@@ -23,7 +23,7 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("auth/user/login", {
+      const response = await axios.post("/v1/auth/user/login", {
         email: email,
         password: password,
       });
