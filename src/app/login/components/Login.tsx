@@ -39,13 +39,13 @@ export default function LoginPage() {
   };
 
   const handleLogin = async () => {
+    console.log(API_BASE);
+    console.log(process.env.NEXT_PUBLIC_API_BASE);
     try {
       const response = await axios.post(API_BASE + "auth/user/login", {
         email: email,
         password: password,
       });
-      console.log(API_BASE);
-      console.log(process.env.NEXT_PUBLIC_API_BASE);
 
       Cookies.set("AUTH_TOKEN", response.data.token);
       Cookies.set("USER_ID", response.data.user.id);
