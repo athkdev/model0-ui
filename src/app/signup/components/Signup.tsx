@@ -46,7 +46,7 @@ export default function SignUp() {
     try {
       setIsLoading(true);
 
-      const registerResponse = await axios.post(API_BASE + "auth/user/signup", {
+      const registerResponse = await axios.post("/v1/auth/user/signup", {
         email: email,
         username: email,
         password: password,
@@ -54,7 +54,7 @@ export default function SignUp() {
       });
 
       if (registerResponse.status === 201 && registerResponse.data.token) {
-        const loginResponse = await axios.post("auth/user/login", {
+        const loginResponse = await axios.post("/v1/auth/user/login", {
           email: email,
           password: password,
         });
