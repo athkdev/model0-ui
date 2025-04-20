@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
-import Image from "next/image";
 
 export default function SignUp() {
   const router = useRouter();
@@ -14,12 +13,8 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isFormFocused, setIsFormFocused] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  // You'll need to configure your environment variables in Next.js
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
   function handleFocus() {
     setIsFormFocused(true);
@@ -29,38 +24,20 @@ export default function SignUp() {
     setIsFormFocused(false);
   }
 
-  function handleMouseMove(event: React.MouseEvent) {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      setMousePosition({
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
-      });
-    }
-  }
-
-  const gradientStyle = {
-    background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(4, 89, 42, 0.15), transparent 80%)`,
-  };
-
   const handleSignUp = async () => {
-    // Reset any previous errors
     setError("");
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address");
       return;
     }
 
-    // Validate password strength
     if (password.length < 8) {
       setError("Password must be at least 8 characters long");
       return;
@@ -69,7 +46,6 @@ export default function SignUp() {
     try {
       setIsLoading(true);
 
-      // First, register the user
       const registerResponse = await axios.post(API_BASE + "auth/user/signup", {
         email: email,
         username: email,
@@ -77,34 +53,26 @@ export default function SignUp() {
         role: "user",
       });
 
-      console.log(registerResponse);
-
-      // If registration is successful, log in automatically
       if (registerResponse.status === 201 && registerResponse.data.token) {
-        const loginResponse = await axios.post(API_BASE + "auth/user/login", {
+        const loginResponse = await axios.post("auth/user/login", {
           email: email,
           password: password,
         });
 
-        // Store the token in localStorage or a state management store
         if (loginResponse.data.authenticated === "true") {
           localStorage.setItem("token", loginResponse.data.token);
           localStorage.setItem("user", JSON.stringify(loginResponse.data.user));
 
-          // Redirect to the dashboard
           router.push("/dashboard");
         } else {
-          // Handle unsuccessful login after registration
           setError(
-            "Registration successful but unable to log in automatically"
+            "Registration successful but unable to log in automatically",
           );
         }
       } else {
-        // Handle unsuccessful registration
         setError(registerResponse.data.error || "Registration failed");
       }
     } catch (err: any) {
-      // Handle errors
       console.error("Sign up error:", err);
       setError(err.response?.data?.error || "An error occurred during sign up");
     } finally {
@@ -117,27 +85,9 @@ export default function SignUp() {
       className="text-black min-h-screen w-full bg-gray-100 relative overflow-hidden"
       ref={containerRef}
     >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={gradientStyle}
-      ></div>
-
-      {/* Main Container - Split Layout (Full Page) */}
       <div className="flex flex-col md:flex-row h-screen w-full">
-        {/* Left Side - Image */}
         <div className="md:w-1/2 bg-neutral-800 relative h-64 md:h-full">
-          {/* Placeholder image - replace with your actual image */}
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-800 to-emerald-600">
-            {/* You can use Next's Image component for optimized images */}
-            {/* <Image 
-              src="/your-image-path.jpg" 
-              alt="Signup image" 
-              fill
-              style={{ objectFit: "cover" }}
-              priority 
-            /> */}
-
-            {/* Placeholder content until you add your image */}
             <div className="text-center p-6">
               <h1 className="text-3xl font-bold text-white mb-2">
                 Join Us Today
@@ -149,7 +99,6 @@ export default function SignUp() {
           </div>
         </div>
 
-        {/* Right Side - Signup Form */}
         <div className="md:w-1/2 bg-white flex items-center justify-center">
           <div className="w-full max-w-md px-8 py-12">
             <div

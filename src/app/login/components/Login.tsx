@@ -12,9 +12,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFormFocused, setIsFormFocused] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
   function handleFocus() {
     setIsFormFocused(true);
@@ -24,25 +21,9 @@ export default function LoginPage() {
     setIsFormFocused(false);
   }
 
-  function handleMouseMove(event: React.MouseEvent) {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      setMousePosition({
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
-      });
-    }
-  }
-
-  const gradientStyle = {
-    background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(4, 89, 42, 0.15), transparent 80%)`,
-  };
-
   const handleLogin = async () => {
-    console.log(API_BASE);
-    console.log(process.env.NEXT_PUBLIC_API_BASE);
     try {
-      const response = await axios.post(API_BASE + "auth/user/login", {
+      const response = await axios.post("auth/user/login", {
         email: email,
         password: password,
       });
@@ -60,11 +41,6 @@ export default function LoginPage() {
       className="text-black min-h-screen w-full bg-gray-100 relative overflow-hidden"
       ref={containerRef}
     >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={gradientStyle}
-      ></div>
-
       <div className="flex flex-col md:flex-row h-screen w-full">
         <div className="md:w-1/2 bg-neutral-800 relative h-64 md:h-full">
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-800 to-emerald-600">
