@@ -44,6 +44,8 @@ export default function LoginPage() {
         email: email,
         password: password,
       });
+      console.log(API_BASE);
+      console.log(process.env.NEXT_PUBLIC_API_BASE);
 
       Cookies.set("AUTH_TOKEN", response.data.token);
       Cookies.set("USER_ID", response.data.user.id);
