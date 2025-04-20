@@ -23,10 +23,15 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("/v1/auth/user/login", {
-        email: email,
-        password: password,
-      });
+      const isDev = process.env.NODE_ENV === "development";
+      const API_BASE = "http://localhost:8000";
+      const response = await axios.post(
+        (isDev ? API_BASE : "") + "/v1/auth/user/login",
+        {
+          email: email,
+          password: password,
+        },
+      );
 
       Cookies.set("AUTH_TOKEN", response.data.token);
       Cookies.set("USER_ID", response.data.user.id);

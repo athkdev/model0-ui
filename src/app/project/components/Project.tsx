@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import ModelCard from "@/components/my/ModelCard";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -27,9 +29,14 @@ export default function Project() {
   const [modelDescription, setModelDescription] = useState("");
   const [modelType, setModelType] = useState(null);
 
+  const isDev = process.env.NODE_ENV === "development";
+  const API_BASE = "http://localhost:8000";
+
   async function fetchProjectData() {
     try {
-      const response = await axios.get(`/v1/api/project/${projectId}`);
+      const response = await axios.get(
+        (isDev ? API_BASE : "") + `/v1/api/project/${projectId}`,
+      );
       setProject(response.data);
     } catch (error) {
       console.error("Failed to fetch project:", error);
@@ -39,7 +46,7 @@ export default function Project() {
   async function fetchModels() {
     try {
       const response = await axios.get(
-        `/v1/api/model/?project_id=${projectId}`,
+        (isDev ? API_BASE : "") + `/v1/api/model/?project_id=${projectId}`,
       );
       setModels(response.data);
     } catch (error) {
@@ -52,19 +59,20 @@ export default function Project() {
 
     // const userID = Cookies.get("USER_ID");
 
-    await axios.post(`/v1/api/model/create/`, {
+    const isDev = process.env.NODE_ENV === "development";
+    const API_BASE = "http://localhost:8000";
+
+    await axios.post((isDev ? API_BASE : "") + `/v1/api/model/create/`, {
       model_name: modelName,
       description: modelDescription,
       project_id: projectId,
       model_type: modelType,
     });
 
-    // Reset form fields
     setModelName("");
     setModelDescription("");
     setModelType(null);
 
-    // Refresh models list
     fetchModels();
   }
 
@@ -77,59 +85,64 @@ export default function Project() {
     <div className="min-h-screen bg-neutral-100 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-20 flex flex-col gap-10 sm:gap-0 sm:flex-row justify-between items-center">
-          <h2 className="text-7xl font-semibold text-gray-800">Your Models</h2>
+          <h2 className="text-5xl font-extralight text-neutral-600 align-middle">
+            My Models
+          </h2>
         </div>
 
         <Dialog>
-          <DialogTrigger className="w-full sm:w-auto">
-            Create New Model
+          <DialogTrigger className="w-full sm:w-auto border p-2 rounded-lg transition cursor-pointer hover:-translate-y-1">
+            Create a Model
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogTitle>Create a model</DialogTitle>
               <DialogDescription>
-                <form onSubmit={handleCreateModel}>
-                  <div className="flex flex-col gap-4 mb-4">
-                    <div>
-                      <label
-                        htmlFor="modelName"
-                        className="font-semibold block mb-2"
-                      >
-                        Model Name
-                      </label>
-                      <Input
-                        id="modelName"
-                        value={modelName}
-                        onChange={(e) => setModelName(e.target.value)}
-                        className="w-full"
-                        autoComplete="off"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="modelDescription"
-                        className="font-semibold block mb-2"
-                      >
-                        Model Description
-                      </label>
-                      <Textarea
-                        id="modelDescription"
-                        value={modelDescription}
-                        onChange={(e) => setModelDescription(e.target.value)}
-                        className="w-full"
-                        rows={3}
-                        autoComplete="off"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="modelType"
-                        className="font-semibold block mb-2"
-                      >
-                        Model Type
-                      </label>
-                      {/* <Dropdown
+                go change the world with AI : )
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleCreateModel}>
+              <div className="flex flex-col gap-4 mb-4">
+                <div>
+                  <label
+                    htmlFor="modelName"
+                    className="font-semibold block mb-2"
+                  >
+                    Model Name
+                  </label>
+                  <Input
+                    id="modelName"
+                    value={modelName}
+                    onChange={(e) => setModelName(e.target.value)}
+                    className="w-full"
+                    autoComplete="off"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="modelDescription"
+                    className="font-semibold block mb-2"
+                  >
+                    Model Description
+                  </label>
+                  <Textarea
+                    id="modelDescription"
+                    value={modelDescription}
+                    onChange={(e) => setModelDescription(e.target.value)}
+                    className="w-full"
+                    rows={3}
+                    autoComplete="off"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="modelType"
+                    className="font-semibold block mb-2"
+                  >
+                    Model Type
+                  </label>
+                  {/* <Dropdown
                         id="modelType"
                         value={modelType}
                         onChange={(e) => setModelType(e.value)}
@@ -138,17 +151,20 @@ export default function Project() {
                         placeholder="Select a model type"
                         className="w-full"
                       /> */}
-                    </div>
-                  </div>
-                  <div className="flex justify-end gap-2">
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <DialogFooter className="sm:justify-start">
+                  <DialogClose asChild>
                     <Button variant="link" type="button">
                       Cancel
                     </Button>
-                    <Button type="submit">Create</Button>
-                  </div>
-                </form>
-              </DialogDescription>
-            </DialogHeader>
+                  </DialogClose>
+
+                  <Button type="submit">Create</Button>
+                </DialogFooter>
+              </div>
+            </form>
           </DialogContent>
         </Dialog>
 

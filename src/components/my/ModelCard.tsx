@@ -23,6 +23,9 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
   const [modelStatus, setModelStatus] = useState("");
   const [copyStatus, setCopyStatus] = useState<Record<number, boolean>>({});
 
+  const isDev = process.env.NODE_ENV === "development";
+  const API_BASE = "http://localhost:8000";
+
   const constants = {
     POLLING_INTERVAL: 5000, // 5 seconds
   };
@@ -52,7 +55,9 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
   async function pollStatus(model: ModelProps) {
     try {
       const response = await axios.get(
-        `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
+        isDev
+          ? API_BASE
+          : "" + `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
       );
       const endpointStatus = response.data.endpoint_status;
 
@@ -87,12 +92,14 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
       pollIntervalRef.current = null;
     }
 
+    const isDev = process.env.NODE_ENV === "development";
+    const API_BASE = "http://localhost:8000";
     if (!model.is_deployed) {
-      await axios.post(`/v1/api/model/deploy/`, {
+      await axios.post((isDev ? API_BASE : "") + `/v1/api/model/deploy/`, {
         model_id: model.id,
       });
     } else {
-      await axios.post(`/v1/api/model/withdraw/`, {
+      await axios.post((isDev ? API_BASE : "") + `/v1/api/model/withdraw/`, {
         model_id: model.id,
       });
     }
@@ -111,7 +118,10 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
 
       try {
         const response = await axios.get(
-          `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
+          isDev
+            ? API_BASE
+            : "" +
+                `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
         );
         const status = response.data.endpoint_status;
 

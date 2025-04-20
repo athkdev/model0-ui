@@ -17,7 +17,11 @@ export async function generateMetadata(
   const projectDescription = "View and manage your ML models in this project";
 
   try {
-    const res = await axios.get(`/v1/api/project/${projectId}`);
+    const isDev = process.env.NODE_ENV === "development";
+    const API_BASE = "http://localhost:8000";
+    const res = await axios.get(
+      (isDev ? API_BASE : "") + `/v1/api/project/${projectId}`,
+    );
 
     if (res.data) {
       projectName = res.data.name || projectName;

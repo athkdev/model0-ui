@@ -46,18 +46,26 @@ export default function SignUp() {
     try {
       setIsLoading(true);
 
-      const registerResponse = await axios.post("/v1/auth/user/signup", {
-        email: email,
-        username: email,
-        password: password,
-        role: "user",
-      });
+      const isDev = process.env.NODE_ENV === "development";
+      const API_BASE = "http://localhost:8000";
+      const registerResponse = await axios.post(
+        (isDev ? API_BASE : "") + "/v1/auth/user/signup",
+        {
+          email: email,
+          username: email,
+          password: password,
+          role: "user",
+        },
+      );
 
       if (registerResponse.status === 201 && registerResponse.data.token) {
-        const loginResponse = await axios.post("/v1/auth/user/login", {
-          email: email,
-          password: password,
-        });
+        const loginResponse = await axios.post(
+          (isDev ? API_BASE : "") + "/v1/auth/user/login",
+          {
+            email: email,
+            password: password,
+          },
+        );
 
         if (loginResponse.data.authenticated === "true") {
           localStorage.setItem("token", loginResponse.data.token);

@@ -25,11 +25,16 @@ export default function Dashboard() {
   const handleSubmit = async () => {
     const userID = Cookies.get("USER_ID");
 
-    const res = await axios.post(`/v1/api/project/create`, {
-      user_id: userID,
-      project_name: projectName,
-      description: projectDescription,
-    });
+    const isDev = process.env.NODE_ENV === "development";
+    const API_BASE = "http://localhost:8000";
+    const res = await axios.post(
+      (isDev ? API_BASE : "") + `/v1/api/project/create`,
+      {
+        user_id: userID,
+        project_name: projectName,
+        description: projectDescription,
+      },
+    );
 
     fetchProjects();
   };
@@ -37,7 +42,11 @@ export default function Dashboard() {
   const fetchProjects = async () => {
     try {
       const userID = Cookies.get("USER_ID");
-      const response = await axios.get(`/v1/api/project/?user_id=${userID}`);
+      const isDev = process.env.NODE_ENV === "development";
+      const API_BASE = "http://localhost:8000";
+      const response = await axios.get(
+        (isDev ? API_BASE : "") + `/v1/api/project/?user_id=${userID}`,
+      );
       console.log(response.data);
       setProjects(response.data);
     } catch (error) {
