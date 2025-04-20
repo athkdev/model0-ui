@@ -22,13 +22,10 @@ export default function Dashboard() {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
 
-  // You'll need to configure your environment variables in Next.js
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
   const handleSubmit = async () => {
     const userID = Cookies.get("USER_ID");
 
-    const res = await axios.post(`${API_BASE}api/project/create`, {
+    const res = await axios.post(`/v1/api/project/create`, {
       user_id: userID,
       project_name: projectName,
       description: projectDescription,
@@ -40,9 +37,7 @@ export default function Dashboard() {
   const fetchProjects = async () => {
     try {
       const userID = Cookies.get("USER_ID");
-      const response = await axios.get(
-        `${API_BASE}api/project/?user_id=${userID}`
-      );
+      const response = await axios.get(`/v1/api/project/?user_id=${userID}`);
       console.log(response.data);
       setProjects(response.data);
     } catch (error) {

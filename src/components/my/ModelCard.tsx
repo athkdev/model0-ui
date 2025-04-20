@@ -23,10 +23,6 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
   const [modelStatus, setModelStatus] = useState("");
   const [copyStatus, setCopyStatus] = useState<Record<number, boolean>>({});
 
-  // You'll need to configure your environment variables in Next.js
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
-  // Define constants (replace with your actual values)
   const constants = {
     POLLING_INTERVAL: 5000, // 5 seconds
   };
@@ -56,7 +52,7 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
   async function pollStatus(model: ModelProps) {
     try {
       const response = await axios.get(
-        `${API_BASE}api/model/endpoint/?endpoint_name=${model.endpoint_name}`
+        `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
       );
       const endpointStatus = response.data.endpoint_status;
 
@@ -92,18 +88,18 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
     }
 
     if (!model.is_deployed) {
-      await axios.post(`${API_BASE}api/model/deploy/`, {
+      await axios.post(`/v1/api/model/deploy/`, {
         model_id: model.id,
       });
     } else {
-      await axios.post(`${API_BASE}api/model/withdraw/`, {
+      await axios.post(`/v1/api/model/withdraw/`, {
         model_id: model.id,
       });
     }
 
     pollIntervalRef.current = setInterval(
       () => pollStatus(model),
-      constants.POLLING_INTERVAL
+      constants.POLLING_INTERVAL,
     );
   }
 
@@ -115,7 +111,7 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
 
       try {
         const response = await axios.get(
-          `${API_BASE}api/model/endpoint/?endpoint_name=${model.endpoint_name}`
+          `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
         );
         const status = response.data.endpoint_status;
 
@@ -124,7 +120,7 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
         if (intermediateStateResponses.includes(status)) {
           pollIntervalRef.current = setInterval(
             () => pollStatus(model),
-            constants.POLLING_INTERVAL
+            constants.POLLING_INTERVAL,
           );
         }
       } catch (error) {
@@ -172,7 +168,7 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
         <h3 className="text-xl font-semibold text-gray-900">{model.name}</h3>
         <span
           className={`px-2 py-1 text-xs font-semibold rounded-full ${getModelLabelColor(
-            modelStatus
+            modelStatus,
           )}`}
         >
           {modelStatus ? modelStatus : "Inactive"}

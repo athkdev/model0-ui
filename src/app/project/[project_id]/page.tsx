@@ -9,17 +9,15 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // Fetch project data from your API
   const projectId = params.project_id;
   let projectName = "Project";
   const projectDescription = "View and manage your ML models in this project";
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
   try {
-    const res = await axios.get(`${API_BASE}api/project/${projectId}`);
+    const res = await axios.get(`/v1/api/project/${projectId}`);
 
     if (res.data) {
       projectName = res.data.name || projectName;

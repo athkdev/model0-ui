@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "Sign Up for Your App Name",
     description:
       "Create an account to get started and access all features of Your App Name.",
-    url: `${process.env.NEXT_PUBLIC_API_BASE}signup`,
+    url: `/signup`,
     siteName: "Your App Name",
     // images: [
     //   {

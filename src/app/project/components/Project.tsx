@@ -21,8 +21,6 @@ export default function Project() {
   const params = useParams();
   const projectId = params.project_id;
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-
   const [project, setProject] = useState(null);
   const [models, setModels] = useState([]);
   const [modelName, setModelName] = useState("");
@@ -31,7 +29,7 @@ export default function Project() {
 
   async function fetchProjectData() {
     try {
-      const response = await axios.get(`${API_BASE}api/project/${projectId}`);
+      const response = await axios.get(`/v1/api/project/${projectId}`);
       setProject(response.data);
     } catch (error) {
       console.error("Failed to fetch project:", error);
@@ -41,7 +39,7 @@ export default function Project() {
   async function fetchModels() {
     try {
       const response = await axios.get(
-        `${API_BASE}api/model/?project_id=${projectId}`
+        `/v1/api/model/?project_id=${projectId}`,
       );
       setModels(response.data);
     } catch (error) {
@@ -54,7 +52,7 @@ export default function Project() {
 
     // const userID = Cookies.get("USER_ID");
 
-    await axios.post(`${API_BASE}api/model/create/`, {
+    await axios.post(`/v1/api/model/create/`, {
       model_name: modelName,
       description: modelDescription,
       project_id: projectId,
