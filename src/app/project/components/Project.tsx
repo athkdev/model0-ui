@@ -28,11 +28,10 @@ export default function Project() {
   const [modelName, setModelName] = useState("");
   const [modelDescription, setModelDescription] = useState("");
   const [modelType, setModelType] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const isDev = process.env.NODE_ENV === "development";
   const API_BASE = "http://localhost:8000";
-  const url =
-    (isDev ? API_BASE : "") + (!isDev ? "/v1" : "") + `/api/project/create/`;
 
   async function fetchProjectData() {
     try {
@@ -59,23 +58,29 @@ export default function Project() {
   async function handleCreateModel(e) {
     e.preventDefault();
 
-    // const userID = Cookies.get("USER_ID");
+    try {
+      // const userID = Cookies.get("USER_ID");
 
-    const isDev = process.env.NODE_ENV === "development";
-    const API_BASE = "http://localhost:8000";
+      const isDev = process.env.NODE_ENV === "development";
+      const API_BASE = "http://localhost:8000";
 
-    await axios.post(url, {
-      model_name: modelName,
-      description: modelDescription,
-      project_id: projectId,
-      model_type: modelType,
-    });
+      await axios.post((isDev ? API_BASE : "") + `/v1/api/model/create/`, {
+        model_name: modelName,
+        description: modelDescription,
+        project_id: projectId,
+        model_type: modelType,
+      });
 
-    setModelName("");
-    setModelDescription("");
-    setModelType(null);
+      setModelName("");
+      setModelDescription("");
+      setModelType(null);
 
-    fetchModels();
+      fetchModels();
+
+      setDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to create model:", error);
+    }
   }
 
   useEffect(() => {
@@ -92,8 +97,11 @@ export default function Project() {
           </h2>
         </div>
 
-        <Dialog>
-          <DialogTrigger className="w-full sm:w-auto border p-2 rounded-lg transition cursor-pointer hover:-translate-y-1">
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger
+            onChange={() => setDialogOpen(true)}
+            className="w-full sm:w-auto border p-2 rounded-lg transition cursor-pointer hover:-translate-y-1"
+          >
             Create a Model
           </DialogTrigger>
           <DialogContent>

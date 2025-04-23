@@ -16,27 +16,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { cx } from "class-variance-authority";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<any>([]);
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleSubmit = async () => {
-    const userID = Cookies.get("USER_ID");
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const userID = Cookies.get("USER_ID");
 
-    const isDev = process.env.NODE_ENV === "development";
-    const API_BASE = "http://localhost:8000";
-    const url =
-      (isDev ? API_BASE : "") + (!isDev ? "/v1" : "") + `/api/project/create`;
-    const res = await axios.post(url, {
-      user_id: userID,
-      project_name: projectName,
-      description: projectDescription,
-    });
+      const isDev = process.env.NODE_ENV === "development";
+      const API_BASE = "http://localhost:8000";
+      const url =
+        (isDev ? API_BASE : "") + (!isDev ? "/v1" : "") + `/api/project/create`;
 
-    fetchProjects();
-  };
+      await axios.post(url, {
+        user_id: userID,
+        project_name: projectName,
+        description: projectDescription,
+      });
+
+      fetchProjects();
+
+      setDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to create project:", error);
+    }
+  }
 
   const fetchProjects = async () => {
     try {
@@ -71,10 +81,11 @@ export default function Dashboard() {
 
   return (
     <>
-      <Dialog>
-        <DialogTrigger className="p-2 mb-5 rounded align-middle underline transform underline-offset-4 hover:-translate-y-1 transition">
-          {/* <Button className="p-2 rounded align-middle underline transform underline-offset-4 hover:-translate-y-1 transition">
-              </Button> */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogTrigger
+          onClick={() => setDialogOpen(true)}
+          className="p-2 mb-5 rounded align-middle underline transform underline-offset-4 hover:-translate-y-1 transition"
+        >
           Create a project
         </DialogTrigger>
         <DialogContent>
@@ -86,7 +97,7 @@ export default function Dashboard() {
             </DialogDescription>
           </DialogHeader>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4 mb-4">
               <div>
                 <label
@@ -120,21 +131,19 @@ export default function Dashboard() {
                   autoComplete="off"
                 />
               </div>
+              <DialogFooter className="sm:justify-start">
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Cancel
+                  </Button>
+                </DialogClose>
+
+                <div className="flex justify-end gap-2">
+                  <Button type="submit">Create</Button>
+                </div>
+              </DialogFooter>
             </div>
           </form>
-          <DialogFooter className="sm:justify-start">
-            <DialogClose asChild>
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </DialogClose>
-
-            <div className="flex justify-end gap-2">
-              <Button onClick={() => handleSubmit()} type="submit">
-                Create
-              </Button>
-            </div>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 
