@@ -19,9 +19,11 @@ export async function generateMetadata(
   try {
     const isDev = process.env.NODE_ENV === "development";
     const API_BASE = "http://localhost:8000";
-    const res = await axios.get(
-      (isDev ? API_BASE : "") + `/v1/api/project/${projectId}`,
-    );
+    const url =
+      (isDev ? API_BASE : "") +
+      (!isDev ? "/v1" : "") +
+      `/api/project/${projectId}`;
+    const res = await axios.get(url);
 
     if (res.data) {
       projectName = res.data.name || projectName;

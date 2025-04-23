@@ -25,6 +25,8 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
 
   const isDev = process.env.NODE_ENV === "development";
   const API_BASE = "http://localhost:8000";
+  const url =
+    (isDev ? API_BASE : "") + (!isDev ? "/v1" : "") + `/api/model/deploy/`;
 
   const constants = {
     POLLING_INTERVAL: 5000, // 5 seconds
@@ -95,7 +97,7 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
     const isDev = process.env.NODE_ENV === "development";
     const API_BASE = "http://localhost:8000";
     if (!model.is_deployed) {
-      await axios.post((isDev ? API_BASE : "") + `/v1/api/model/deploy/`, {
+      await axios.post(url, {
         model_id: model.id,
       });
     } else {

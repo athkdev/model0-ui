@@ -48,15 +48,14 @@ export default function SignUp() {
 
       const isDev = process.env.NODE_ENV === "development";
       const API_BASE = "http://localhost:8000";
-      const registerResponse = await axios.post(
-        (isDev ? API_BASE : "") + "/v1/auth/user/signup",
-        {
-          email: email,
-          username: email,
-          password: password,
-          role: "user",
-        },
-      );
+      const url =
+        (isDev ? API_BASE : "") + (!isDev ? "/v1" : "") + `/auth/user/signup`;
+      const registerResponse = await axios.post(url, {
+        email: email,
+        username: email,
+        password: password,
+        role: "user",
+      });
 
       if (registerResponse.status === 201 && registerResponse.data.token) {
         const loginResponse = await axios.post(

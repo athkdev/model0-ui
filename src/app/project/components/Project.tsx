@@ -31,6 +31,8 @@ export default function Project() {
 
   const isDev = process.env.NODE_ENV === "development";
   const API_BASE = "http://localhost:8000";
+  const url =
+    (isDev ? API_BASE : "") + (!isDev ? "/v1" : "") + `/api/project/create/`;
 
   async function fetchProjectData() {
     try {
@@ -62,7 +64,7 @@ export default function Project() {
     const isDev = process.env.NODE_ENV === "development";
     const API_BASE = "http://localhost:8000";
 
-    await axios.post((isDev ? API_BASE : "") + `/v1/api/model/create/`, {
+    await axios.post(url, {
       model_name: modelName,
       description: modelDescription,
       project_id: projectId,
