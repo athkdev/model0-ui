@@ -24,7 +24,7 @@ export default function Project() {
   const projectId = params.project_id;
 
   const [project, setProject] = useState(null);
-  const [models, setModels] = useState([]);
+  const [models, setModels] = useState<[]>([]);
   const [modelName, setModelName] = useState("");
   const [modelDescription, setModelDescription] = useState("");
   const [modelType, setModelType] = useState(null);
@@ -33,11 +33,14 @@ export default function Project() {
   const isDev = process.env.NODE_ENV === "development";
   const API_BASE = "http://localhost:8000";
 
+  const url =
+    (isDev ? API_BASE : "") +
+    (!isDev ? "/v1" : "") +
+    `/api/project/${projectId}`;
+
   async function fetchProjectData() {
     try {
-      const response = await axios.get(
-        (isDev ? API_BASE : "") + `/v1/api/project/${projectId}`,
-      );
+      const response = await axios.get(url);
       setProject(response.data);
     } catch (error) {
       console.error("Failed to fetch project:", error);
@@ -46,9 +49,7 @@ export default function Project() {
 
   async function fetchModels() {
     try {
-      const response = await axios.get(
-        (isDev ? API_BASE : "") + `/v1/api/model/?project_id=${projectId}`,
-      );
+      const response = await axios.get(url);
       setModels(response.data);
     } catch (error) {
       console.error("Failed to fetch models:", error);
@@ -179,14 +180,16 @@ export default function Project() {
         </Dialog>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {models.map((model) => (
-            <div key={model.id}>
-              <ModelCard model={model} fetchModels={fetchModels} />
-            </div>
-          ))}
+          {models &&
+            Array.isArray(models) &&
+            models?.map((model) => (
+              <div key={model?.id}>
+                <ModelCard model={model} fetchModels={fetchModels} />
+              </div>
+            ))}
         </div>
 
-        {models.length === 0 && (
+        {models?.length === 0 && (
           <div className="text-center text-gray-500 mt-8">
             No models yet. Create your first model!
           </div>
