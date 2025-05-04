@@ -33,13 +33,13 @@ export default function Project() {
   const isDev = process.env.NODE_ENV === "development";
   const API_BASE = "http://localhost:8000";
 
-  const url =
-    (isDev ? API_BASE : "") +
-    (!isDev ? "/v1" : "") +
-    `/api/project/${projectId}`;
-
   async function fetchProjectData() {
     try {
+      const url =
+        (isDev ? API_BASE : "") +
+        (!isDev ? "/v1" : "") +
+        `/api/project/${projectId}`;
+
       const response = await axios.get(url);
       setProject(response.data);
     } catch (error) {
@@ -49,6 +49,11 @@ export default function Project() {
 
   async function fetchModels() {
     try {
+      const url =
+        (isDev ? API_BASE : "") +
+        (!isDev ? "/v1" : "") +
+        `/api/model/?project_id=${projectId}`;
+
       const response = await axios.get(url);
       setModels(response.data);
     } catch (error) {
@@ -65,12 +70,15 @@ export default function Project() {
       const isDev = process.env.NODE_ENV === "development";
       const API_BASE = "http://localhost:8000";
 
-      await axios.post((isDev ? API_BASE : "") + `/v1/api/model/create/`, {
-        model_name: modelName,
-        description: modelDescription,
-        project_id: projectId,
-        model_type: modelType,
-      });
+      await axios.post(
+        (isDev ? API_BASE : "") + (!isDev ? "/v1" : "") + `/api/model/create/`,
+        {
+          model_name: modelName,
+          description: modelDescription,
+          project_id: projectId,
+          model_type: modelType,
+        },
+      );
 
       setModelName("");
       setModelDescription("");
@@ -87,7 +95,7 @@ export default function Project() {
   useEffect(() => {
     fetchProjectData();
     fetchModels();
-  }, [projectId]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-neutral-100 p-8">
@@ -179,14 +187,16 @@ export default function Project() {
           </DialogContent>
         </Dialog>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {models &&
             Array.isArray(models) &&
-            models?.map((model) => (
-              <div key={model?.id}>
-                <ModelCard model={model} fetchModels={fetchModels} />
-              </div>
-            ))}
+            models?.map((model) => {
+              return (
+                <div key={model?.id}>
+                  <ModelCard model={model} fetchModels={fetchModels} />
+                </div>
+              );
+            })}
         </div>
 
         {models?.length === 0 && (

@@ -58,7 +58,6 @@ export default function Dashboard() {
         (!isDev ? "/v1" : "") +
         `/api/project/?user_id=${userID}`;
       const response = await axios.get(url);
-      console.log(response.data);
       setProjects(response.data);
     } catch (error) {
       console.error("Failed to fetch projects:", error);
@@ -70,7 +69,6 @@ export default function Dashboard() {
   };
 
   const openProject = (projectId: string) => {
-    console.log("Opening project:", projectId);
     const projectUrl = `/project/${projectId}`;
     window.open(projectUrl, "_blank");
   };

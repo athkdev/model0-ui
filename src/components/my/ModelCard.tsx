@@ -59,11 +59,11 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
       const response = await axios.get(
         isDev
           ? API_BASE
-          : "" + `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
+          : "" +
+              (!isDev ? "/v1" : "") +
+              `/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
       );
       const endpointStatus = response.data.endpoint_status;
-
-      console.log(endpointStatus);
 
       setModelStatus(endpointStatus);
 
@@ -101,9 +101,14 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
         model_id: model.id,
       });
     } else {
-      await axios.post((isDev ? API_BASE : "") + `/v1/api/model/withdraw/`, {
-        model_id: model.id,
-      });
+      await axios.post(
+        (isDev ? API_BASE : "") +
+          (!isDev ? "/v1" : "") +
+          `/api/model/withdraw/`,
+        {
+          model_id: model.id,
+        },
+      );
     }
 
     pollIntervalRef.current = setInterval(
@@ -123,7 +128,8 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
           isDev
             ? API_BASE
             : "" +
-                `/v1/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
+                (!isDev ? "/v1" : "") +
+                `/api/model/endpoint/?endpoint_name=${model.endpoint_name}`,
         );
         const status = response.data.endpoint_status;
 
@@ -175,7 +181,7 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md overflow-hidden transition duration-300 hover:scale-105">
+    <div className="p-6 bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-xl font-semibold text-gray-900">{model.name}</h3>
         <span
@@ -201,12 +207,13 @@ export default function ModelCard({ model, fetchModels }: ModelCardProps) {
         </button>
         <Button
           onClick={() => toggleModelStatus(model)}
-          className={`font-semibold py-2 px-4 rounded ${
-            !model.is_deployed ? "text-black" : "text-white"
-          }`}
+          // className={`font-semibold py-2 px-4 rounded ${
+          //   !model.is_deployed ? "text-black" : "text-white"
+          // }`}
           // filled={model.is_deployed}
+          disabled
         >
-          {getButtonText(model)}
+          {getButtonText(model)} (Sorry, deploying is paused.)
         </Button>
       </div>
     </div>
